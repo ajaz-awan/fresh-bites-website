@@ -5,14 +5,18 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { siteConfig } from "@/lib/siteConfig";
 import { useCart } from "@/context/CartContext";
+import CartDrawer from "@/components/CartDrawer";
 
 export default function Navbar(): ReactElement {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
   const { totalItems } = useCart();
   const pathname = usePathname();
 
   const toggleMenu = (): void => setIsOpen((prev) => !prev);
   const closeMenu = (): void => setIsOpen(false);
+  const openCart = (): void => setIsCartOpen(true);
+  const closeCart = (): void => setIsCartOpen(false);
 
   return (
     <header className="relative z-50">
@@ -62,8 +66,10 @@ export default function Navbar(): ReactElement {
 
         {/* Right: cart + mobile toggle */}
         <div className="flex items-center gap-3">
-          <Link
-            href="/menu"
+          <button
+            type="button"
+            onClick={openCart}
+            aria-label="Open cart"
             className="relative flex h-11 w-11 items-center justify-center rounded-full text-white transition-all hover:scale-105 hover:brightness-110"
             style={{ backgroundColor: "var(--color-accent)" }}
           >
@@ -76,7 +82,7 @@ export default function Navbar(): ReactElement {
                 {totalItems}
               </span>
             )}
-          </Link>
+          </button>
 
           <button
             type="button"
@@ -115,6 +121,8 @@ export default function Navbar(): ReactElement {
           </ul>
         </div>
       )}
+
+      <CartDrawer isOpen={isCartOpen} onClose={closeCart} />
     </header>
   );
 }

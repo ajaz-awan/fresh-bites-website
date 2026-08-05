@@ -16,8 +16,17 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://fresh-bites-website.vercel.app"),
   title: siteConfig.brand.name,
   description: siteConfig.brand.tagline,
+  openGraph: {
+    title: siteConfig.brand.name,
+    description: siteConfig.brand.tagline,
+    url: "/",
+    siteName: siteConfig.brand.name,
+    locale: "en_US",
+    type: "website",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
