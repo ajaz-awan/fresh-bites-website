@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactElement } from "react";
+import Image from "next/image";
 import type { MenuItem } from "@/types";
 import { useCart } from "@/context/CartContext";
 
@@ -21,12 +22,17 @@ export default function MenuCard({ item }: MenuCardProps): ReactElement {
     >
       {/* Image area */}
       <div
-        className="flex aspect-[4/3] w-full items-center justify-center"
+        className="relative flex aspect-[4/3] w-full items-center justify-center"
         style={{ backgroundColor: "rgba(107,30,35,0.06)" }}
       >
         {item.image_url ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={item.image_url} alt={item.name} className="h-full w-full object-cover" />
+          <Image
+            src={item.image_url}
+            alt={item.name}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover"
+          />
         ) : (
           <span className="text-xs" style={{ color: "var(--color-primary)" }}>
             Photo coming soon

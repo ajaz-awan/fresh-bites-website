@@ -18,6 +18,7 @@ export interface CartItem extends MenuItem {
 
 // A single line item as stored inside an order's `items` JSON column
 export interface OrderLineItem {
+  id: string;
   name: string;
   price: number;
   cost_price: number;

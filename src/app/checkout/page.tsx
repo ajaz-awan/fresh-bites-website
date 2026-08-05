@@ -6,8 +6,6 @@ import { z } from "zod";
 import Navbar from "@/components/Navbar";
 import { useCart } from "@/context/CartContext";
 import { siteConfig } from "@/lib/siteConfig";
-import { supabase } from "@/lib/supabaseClient";
-import type { OrderLineItem } from "@/types";
 
 // Validates the checkout form before we build the WhatsApp message.
 // This is client-side only (easy to bypass), so it's about catching
@@ -45,6 +43,7 @@ export default function CheckoutPage(): ReactElement {
   const [streetAddress, setStreetAddress] = useState<string>("");
   const [notes, setNotes] = useState<string>("");
   const [errors, setErrors] = useState<CheckoutFormErrors>({});
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const buildWhatsAppMessage = (): string => {
     const lines: string[] = [];
@@ -68,8 +67,6 @@ export default function CheckoutPage(): ReactElement {
 
     return lines.join("\n");
   };
-
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
@@ -95,39 +92,36 @@ export default function CheckoutPage(): ReactElement {
     setErrors({});
     setIsSubmitting(true);
 
-    const orderItems: OrderLineItem[] = items.map((item) => ({
-      name: item.name,
-      price: item.price,
-      cost_price: item.cost_price,
+    // Only send item id + quantity — the server re-fetches real prices
+    // from the database rather than trusting anything from the browser.
+    const orderItemsPayload = items.map((item) => ({
+      id: item.id,
       quantity: item.quantity,
     }));
-
-    const totalRevenue: number = totalPrice;
-    const totalCost: number = items.reduce(
-      (sum, item) => sum + item.cost_price * item.quantity,
-      0
-    );
-    const totalProfit: number = totalRevenue - totalCost;
 
     // Save the order for sales/profit tracking. If this fails (e.g. no
     // internet), we still let the customer complete their order via
     // WhatsApp rather than blocking them — losing a record is better than
     // losing a sale.
-    const { error } = await supabase.from("orders").insert({
-      business_id: siteConfig.businessId,
-      customer_name: customerName,
-      phone,
-      delivery_area: deliveryArea,
-      address: streetAddress,
-      notes: notes.trim() || null,
-      items: orderItems,
-      total_revenue: totalRevenue,
-      total_cost: totalCost,
-      total_profit: totalProfit,
-    });
+    try {
+      const response = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          customerName,
+          phone,
+          deliveryArea,
+          streetAddress,
+          notes: notes.trim() || undefined,
+          items: orderItemsPayload,
+        }),
+      });
 
-    if (error) {
-      console.error("Could not save order record:", error.message);
+      if (!response.ok) {
+        console.error("Could not save order record.");
+      }
+    } catch {
+      console.error("Could not reach the server to save the order record.");
     }
 
     setIsSubmitting(false);
