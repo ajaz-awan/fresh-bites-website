@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Fresh Bites — Food Ordering Website
+
+A full-stack food ordering website built for a home-based food business, letting customers browse the menu, add items to a cart, and place delivery orders online.
+
+Built with **Next.js (App Router)**, **TypeScript**, **Tailwind CSS**, and **Supabase**.
+
+## Features
+
+- 📋 Menu browsing, grouped by category, fetched from Supabase
+- 🛒 Cart with add/remove/update quantity (React Context)
+- ✅ Checkout with form validation (Zod, client + server side)
+- 🔒 Server-side price verification — order totals are always recalculated from the database, never trusted from the client
+- 📊 Password-protected admin dashboard for viewing orders, revenue, cost, and profit (today / this month / all time)
+- 🚦 Basic rate limiting on the admin login endpoint
+- 🖼️ Auto-generated Open Graph image, sitemap, and robots.txt for SEO
+
+## Tech Stack
+
+| Layer | Tech |
+|---|---|
+| Framework | Next.js 16 (App Router) |
+| Language | TypeScript |
+| Styling | Tailwind CSS |
+| Database | Supabase (PostgreSQL) |
+| Validation | Zod |
+
+## Project Structure
+
+\`\`\`
+src/
+  app/
+    page.tsx          → Home page
+    menu/              → Menu page (Server Component, ISR every 5 min)
+    checkout/          → Checkout page
+    admin/             → Admin dashboard (password protected)
+    api/
+      orders/          → Order creation endpoint
+      admin/orders/    → Admin order-fetching endpoint (rate limited)
+  components/          → Navbar, Cart Drawer, Menu Card, etc.
+  context/             → Cart state (React Context)
+  lib/                 → Supabase clients, site config
+  types/                → Shared TypeScript types
+\`\`\`
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repo and install dependencies:
+   \`\`\`bash
+   git clone https://github.com/ajaz-awan/fresh-bites-website.git
+   cd fresh-bites-website
+   npm install
+   \`\`\`
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+2. Create a \`.env.local\` file in the root with:
+   \`\`\`
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+   ADMIN_PASSWORD=your_admin_password
+   \`\`\`
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Run the dev server:
+   \`\`\`bash
+   npm run dev
+   \`\`\`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+   Open [http://localhost:3000](http://localhost:3000) to view it.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Notes
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- \`siteConfig.ts\` centralizes all business-specific info (brand name, contact, delivery areas, theme colors) so the template can be reused for a different business by editing one file.
+- The \`SUPABASE_SERVICE_ROLE_KEY\` is only ever used server-side (API routes / Server Components) and never exposed to the browser.

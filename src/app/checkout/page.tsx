@@ -242,7 +242,7 @@ export default function CheckoutPage(): ReactElement {
             label="Your Name"
             value={customerName}
             onChange={setCustomerName}
-            placeholder="e.g. Ayesha Khan"
+            placeholder="e.g.  Khan"
             error={errors.customerName}
           />
 
