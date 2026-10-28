@@ -77,7 +77,13 @@ npm run dev
 Open [http://localhost:3000](http://localhost:3000).
 
 ## Configuration
+## Screenshots
 
+![Screenshot 1](Screenshot%202026-10-28%20233826.png)
+
+![Screenshot 2](Screenshot%202026-10-28%20234123.png)
+
+![Screenshot 3](Screenshot%202026-10-28%20234217.png)
 Business details, delivery areas, and theme settings are managed in `siteConfig.ts`.
 
 ## Setup Documentation To Add
