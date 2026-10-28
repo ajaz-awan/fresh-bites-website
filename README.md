@@ -90,7 +90,7 @@ Business details, delivery areas, and theme settings are managed in `siteConfig.
 
 - Database schema and setup SQL
 - Sample menu data
-- Screenshots of the customer pages and admin dashboard
+- Admin dashboard screenshot using sample data
 ## Live Demo
 
 [Visit Fresh Bites](https://fresh-bites-website.vercel.app/)
