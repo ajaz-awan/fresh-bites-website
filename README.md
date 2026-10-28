@@ -1,72 +1,87 @@
 # Fresh Bites — Food Ordering Website
 
-A full-stack food ordering website built for a home-based food business, letting customers browse the menu, add items to a cart, and place delivery orders online.
+A full-stack food ordering website for a home-based food business. Customers can browse the menu, manage their cart, and place delivery orders online.
 
-Built with **Next.js (App Router)**, **TypeScript**, **Tailwind CSS**, and **Supabase**.
+Built with **Next.js**, **TypeScript**, **Tailwind CSS**, and **Supabase**.
 
 ## Features
 
-- 📋 Menu browsing, grouped by category, fetched from Supabase
-- 🛒 Cart with add/remove/update quantity (React Context)
-- ✅ Checkout with form validation (Zod, client + server side)
-- 🔒 Server-side price verification — order totals are always recalculated from the database, never trusted from the client
-- 📊 Password-protected admin dashboard for viewing orders, revenue, cost, and profit (today / this month / all time)
-- 🚦 Basic rate limiting on the admin login endpoint
-- 🖼️ Auto-generated Open Graph image, sitemap, and robots.txt for SEO
+- Menu browsing, grouped by category
+- Shopping cart with quantity updates and item removal
+- Checkout with client-side and server-side validation
+- Server-side price verification using database prices
+- Password-protected admin dashboard for orders, revenue, cost, and profit
+- Basic rate limiting on the admin login endpoint
+- Open Graph image, sitemap, and robots.txt
 
 ## Tech Stack
 
-| Layer | Tech |
+| Layer | Technology |
 |---|---|
-| Framework | Next.js 16 (App Router) |
+| Framework | Next.js 16 — App Router |
 | Language | TypeScript |
 | Styling | Tailwind CSS |
-| Database | Supabase (PostgreSQL) |
+| Database | Supabase — PostgreSQL |
 | Validation | Zod |
+| Cart State | React Context |
 
 ## Project Structure
 
-\`\`\`
+```text
 src/
   app/
-    page.tsx          → Home page
-    menu/              → Menu page (Server Component, ISR every 5 min)
-    checkout/          → Checkout page
-    admin/             → Admin dashboard (password protected)
+    page.tsx          # Home page
+    menu/             # Menu page
+    checkout/         # Checkout page
+    admin/            # Admin dashboard
     api/
-      orders/          → Order creation endpoint
-      admin/orders/    → Admin order-fetching endpoint (rate limited)
-  components/          → Navbar, Cart Drawer, Menu Card, etc.
-  context/             → Cart state (React Context)
-  lib/                 → Supabase clients, site config
-  types/                → Shared TypeScript types
-\`\`\`
+      orders/         # Order creation endpoint
+      admin/orders/   # Admin order-fetching endpoint
+  components/         # Shared UI components
+  context/            # Cart state
+  lib/                # Supabase clients and site configuration
+  types/              # Shared TypeScript types
+```
 
 ## Getting Started
 
-1. Clone the repo and install dependencies:
-   \`\`\`bash
-   git clone https://github.com/ajaz-awan/fresh-bites-website.git
-   cd fresh-bites-website
-   npm install
-   \`\`\`
+### 1. Clone the repository
 
-2. Create a \`.env.local\` file in the root with:
-   \`\`\`
-   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-   SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
-   ADMIN_PASSWORD=your_admin_password
-   \`\`\`
+```bash
+git clone https://github.com/ajaz-awan/fresh-bites-website.git
+cd fresh-bites-website
+npm install
+```
 
-3. Run the dev server:
-   \`\`\`bash
-   npm run dev
-   \`\`\`
+### 2. Configure environment variables
 
-   Open [http://localhost:3000](http://localhost:3000) to view it.
+Create a `.env.local` file in the project root:
 
-## Notes
+```dotenv
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+ADMIN_PASSWORD=your_admin_password
+```
 
-- \`siteConfig.ts\` centralizes all business-specific info (brand name, contact, delivery areas, theme colors) so the template can be reused for a different business by editing one file.
-- The \`SUPABASE_SERVICE_ROLE_KEY\` is only ever used server-side (API routes / Server Components) and never exposed to the browser.
+Use your own Supabase project and configure the database tables required by the application. Environment variables alone do not create the database schema.
+
+Keep `.env.local` out of version control. The service role key and admin password must remain server-side.
+
+### 3. Start the development server
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+## Configuration
+
+Business details, delivery areas, and theme settings are managed in `siteConfig.ts`.
+
+## Setup Documentation To Add
+
+- Database schema and setup SQL
+- Sample menu data
+- Screenshots of the customer pages and admin dashboard
